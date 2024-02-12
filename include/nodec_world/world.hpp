@@ -1,6 +1,7 @@
 #ifndef NODEC_WORLD__WORLD_HPP_
 #define NODEC_WORLD__WORLD_HPP_
 
+#include "system_registry.hpp"
 #include "world_clock.hpp"
 
 #include <nodec_scene/scene.hpp>
@@ -19,7 +20,8 @@ public:
           WorldClock::WorldClockInterface clock_interface)
         : initialized_{initialized_signal},
           stepped_{stepped_signal},
-          clock_{clock_interface} {}
+          clock_{clock_interface},
+          system_registry_{scene_.registry()} {}
 
     virtual ~World() {}
 
@@ -51,11 +53,16 @@ public:
         return clock_;
     }
 
+    SystemRegistry &system_registry() noexcept {
+        return system_registry_;
+    }
+
 private:
     nodec_scene::Scene scene_;
-    WorldSignal& initialized_;
-    WorldSignal& stepped_;
+    WorldSignal &initialized_;
+    WorldSignal &stepped_;
     WorldClock::WorldClockInterface clock_;
+    SystemRegistry system_registry_;
 
     NODEC_DISABLE_COPY(World)
 };
