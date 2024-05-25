@@ -1,5 +1,5 @@
-#ifndef NODEC_WORLD__SYSTEM_LOADER_HPP_
-#define NODEC_WORLD__SYSTEM_LOADER_HPP_
+#ifndef NODEC_WORLD__SYSTEM_REGISTRY_HPP_
+#define NODEC_WORLD__SYSTEM_REGISTRY_HPP_
 
 #include <functional>
 #include <memory>
@@ -53,6 +53,8 @@ public:
         using namespace nodec_scene;
         static_assert(std::is_same<decltype(factory()), std::unique_ptr<System>>::value, "Factory function must return std::unique_ptr<System>.");
 
+        if (systems_.find(nodec::type_id<System>()) != systems_.end()) return;
+
         auto entry = std::make_shared<SystemEntry<System>>();
         entry->factory = std::forward<Factory>(factory);
 
@@ -63,6 +65,8 @@ public:
         entry->connections[1] = scene_registry_.component_destroyed<SystemEnablerComponent>().connect([=](SceneRegistry &registry, SceneEntity entity) {
             entry->decrement_reference();
         });
+        
+        systems_[nodec::type_id<System>()] = entry;
     }
 
 public:
