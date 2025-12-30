@@ -37,11 +37,11 @@ public:
     //  * https://docs.unity3d.com/Packages/com.unity.entities@0.17/manual/world.html
     //  * https://www.gymlibrary.ml/content/environment_creation/
 
-    WorldSignal::SignalInterface initialized() {
+    WorldSignal::Interface initialized() {
         return initialized_.signal_interface();
     }
 
-    WorldSignal::SignalInterface stepped() {
+    WorldSignal::Interface stepped() {
         return stepped_.signal_interface();
     }
 
